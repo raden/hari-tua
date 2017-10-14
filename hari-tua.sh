@@ -48,29 +48,18 @@ kira_tahun() {
 for ((tempoh=$umur_mula; tempoh<=$umur_pencen; tempoh++)); 
 do
 if [[ $tempoh -eq $umur_mula ]]; then
-#	dividen_tahunan[$umur_mula]=$(echo "scale=2;${simpanan_tahunan[$umur_mula]}*$DIVIDEN"|bc)
-#	simpanan_tahunan[$umur_mula]=$(echo "scale=2;${simpanan_tahunan[$umur_mula]}+${dividen_tahunan[$umur_mula]}"|bc)
 	dividen_tahunan[$tempoh]=$(echo "scale=2;$komitmen*12*$DIVIDEN"|bc)
 	simpanan_tahunan[$tempoh]=$(echo "scale=2;($komitmen*12)+${dividen_tahunan[$tempoh]}"|bc)
 
-        printf "\t $tempoh \t $komitmen \t\t\t `echo $komitmen*12|bc`\t\t\t `echo $komitmen*12|bc`\t\t\t ${simpanan_tahunan[$tempoh]} \t\t ${dividen_tahunan[$tempoh]} "
+        printf "\t $tempoh\t $komitmen\t\t\t `echo $komitmen*12|bc`\t\t\t 0\t\t`echo $komitmen*12|bc`\t\t\t${simpanan_tahunan[tempoh]}\t\t\t${dividen_tahunan[$tempoh]} "
 	printf "\n"
 
-
-
-
 elif [[ $tempoh -gt $umur_mula ]]; then
-	
-#	dividen_tahunan[$umur_mula+1]=$(echo "scale=2;${simpanan_tahunan[$umur_mula]}*$DIVIDEN"|bc)
-#	simpanan_tahunan[$umur_mula+1]=$(echo "scale=2;${simpanan_tahunan[$umur_mula]}+${dividen_tahunan[$umur_mula]}"|bc)
-
 	dividen_tahunan[$tempoh]=$(echo "scale=2;(${simpanan_tahunan[$tempoh-1]}+($komitmen*12))*$DIVIDEN"|bc)
 	simpanan_tahunan[$tempoh]=$(echo "scale=2;${simpanan_tahunan[$tempoh-1]}+($komitmen*12)+${dividen_tahunan[$tempoh]}"|bc)
 
-        printf "\t $tempoh \t $komitmen \t\t\t `echo $komitmen*12|bc`\t\t\t ${simpanan_tahunan[$tempoh-1]}\t\t ${simpanan_tahunan[$tempoh]} \t\t ${dividen_tahunan[$tempoh]} "
+        printf "\t $tempoh \t $komitmen \t\t\t `echo $komitmen*12|bc`\t\t\t ${simpanan_tahunan[$tempoh-1]}\t`echo "scale=2;${simpanan_tahunan[$tempoh-1]}+($komitmen*12)"|bc`\t\t${simpanan_tahunan[$tempoh]}\t\t ${dividen_tahunan[$tempoh]} "
 	printf "\n"
-
-
 
 else
 	echo "Kena check balik..ada benda tak betul"
@@ -82,10 +71,8 @@ done
 }
 
 
-
-
 echo '------------------------------------------------------------------------------------------------------------------------------'
-printf "\tTAHUN \tKOMITMEN BULANAN \t KOMITMEN TAHUNAN \tSIMPANAN AWAL TAHUN \tSIMPANAN + DIVIDEN\tDIVIDEN\n"
+printf "\tTAHUN\tKOMITMEN BULANAN\t KOMITMEN TAHUNAN\tSIMP AWAL TAHUN\tSIMP+KOMITMEN SETAHUN\tSIMP+DIVIDEN\tDIVIDEN\n"
 echo '------------------------------------------------------------------------------------------------------------------------------'
 
 	kira_tahun
