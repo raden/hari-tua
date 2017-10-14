@@ -42,23 +42,29 @@ if [ "$#" -eq 0 ]; then
 fi
 
 DIVIDEN=$(echo "scale=2;($dividen_tahunan/100)"|bc)
+KOMITMEN_SETAHUN=$(echo "$komitmen*12"|bc)
 
 kira_tahun() {
 
 for ((tempoh=$umur_mula; tempoh<=$umur_pencen; tempoh++)); 
+
 do
+
+
 if [[ $tempoh -eq $umur_mula ]]; then
 	dividen_tahunan[$tempoh]=$(echo "scale=2;$komitmen*12*$DIVIDEN"|bc)
 	simpanan_tahunan[$tempoh]=$(echo "scale=2;($komitmen*12)+${dividen_tahunan[$tempoh]}"|bc)
 
-        printf "\t $tempoh\t $komitmen\t\t\t `echo $komitmen*12|bc`\t\t\t 0\t\t`echo $komitmen*12|bc`\t\t\t${simpanan_tahunan[tempoh]}\t\t\t${dividen_tahunan[$tempoh]} "
+        printf "\t $tempoh\t $komitmen\t\t$KOMITMEN_SETAHUN\t\t 0\t\t\t $KOMITMEN_SETAHUN \t\t ${simpanan_tahunan[tempoh]}\t${dividen_tahunan[$tempoh]} "
 	printf "\n"
 
 elif [[ $tempoh -gt $umur_mula ]]; then
+
+	SIMPANAN_BERDIVIDEN=$(echo "${simpanan_tahunan[$tempoh-1]}+($komitmen*12)"|bc)
 	dividen_tahunan[$tempoh]=$(echo "scale=2;(${simpanan_tahunan[$tempoh-1]}+($komitmen*12))*$DIVIDEN"|bc)
 	simpanan_tahunan[$tempoh]=$(echo "scale=2;${simpanan_tahunan[$tempoh-1]}+($komitmen*12)+${dividen_tahunan[$tempoh]}"|bc)
 
-        printf "\t $tempoh \t $komitmen \t\t\t `echo $komitmen*12|bc`\t\t\t ${simpanan_tahunan[$tempoh-1]}\t`echo "scale=2;${simpanan_tahunan[$tempoh-1]}+($komitmen*12)"|bc`\t\t${simpanan_tahunan[$tempoh]}\t\t ${dividen_tahunan[$tempoh]} "
+        printf "\t $tempoh \t $komitmen \t\t$KOMITMEN_SETAHUN\t\t ${simpanan_tahunan[$tempoh-1]}\t\t $SIMPANAN_BERDIVIDEN \t ${simpanan_tahunan[$tempoh]}\t${dividen_tahunan[$tempoh]} "
 	printf "\n"
 
 else
@@ -72,7 +78,7 @@ done
 
 
 echo '------------------------------------------------------------------------------------------------------------------------------'
-printf "\tTAHUN\tKOMITMEN BULANAN\t KOMITMEN TAHUNAN\tSIMP AWAL TAHUN\tSIMP+KOMITMEN SETAHUN\tSIMP+DIVIDEN\tDIVIDEN\n"
+printf "\tTAHUN\tK.BULANAN\tK.TAHUNAN\tSIMP AWAL\tSIMP+KOMITMEN/TAHUN\tSIMP+DIVIDEN\tDIVIDEN\n"
 echo '------------------------------------------------------------------------------------------------------------------------------'
 
 	kira_tahun
