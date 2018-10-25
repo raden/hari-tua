@@ -1,6 +1,15 @@
 #!/bin/bash
 #Written by Muhammad Najmi Ahmad Zabidi <najmi.zabidi@gmail.com>, Oct 2017
 
+# periksa jika bc telah dipasang
+adakah_bc_dipasang=$(which bc 2>/dev/null)
+if [ -z "$adakah_bc_dipasang" ]
+  then
+  #bc tidak dipasang
+  echo "Ralat: Aplikasi bc tidak dijumpai. Sila pasang aplikasi bc sebelum menggunakan perisian ini"
+  exit
+fi
+
 PROGNAME=`basename $0`
 
 usage() {
